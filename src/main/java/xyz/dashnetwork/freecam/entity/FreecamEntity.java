@@ -11,18 +11,12 @@ public class FreecamEntity extends LocalClientPlayerEntity {
         abilities.flying = true;
     }
 
-    public void spawn() {
-        world.addEntity(this);
-    }
+    public void spawn() { world.addEntity(this); }
 
-    public void despawn() {
-        world.removeEntity(this);
-    }
+    public void despawn() { world.removeEntity(this); }
 
     @Override
-    public boolean isInWater() {
-        return false;
-    }
+    public boolean isInWater() { return false; }
 
     @Override
     public void tick() {
