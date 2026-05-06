@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "freecam",
+  "version": "${version}",
+  "name": "Freecam",
+  "description": "A Freecam mod for Ornithe 1.8.9. Should be undetectable by the server.",
+  "authors": ["MasterDash5"],
+  "contact": {
+    "sources": "https://github.com/dashnetworkxyz/Freecam"
+  },
+  "license": "GPL-3.0",
+  "environment": "client",
+  "entrypoints": {
+    "client-init": [
+      "xyz.dashnetwork.freecam.FreecamMod"
+    ]
+  },
+  "mixins": [
+    "freecam.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.17.3",
+    "minecraft": "1.8.9",
+    "osl-entrypoints": ">=0.4.0",
+    "osl-keybinds": ">=0.2.0"
+  }
+}
