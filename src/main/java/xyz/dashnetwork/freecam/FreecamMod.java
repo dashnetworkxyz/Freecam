@@ -2,7 +2,6 @@ package xyz.dashnetwork.freecam;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.living.player.Input;
-import net.minecraft.client.entity.living.player.KeyboardInput;
 import net.minecraft.client.entity.living.player.LocalClientPlayerEntity;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.world.WorldSettings;
@@ -12,7 +11,7 @@ import net.ornithemc.osl.lifecycle.api.client.ClientWorldEvents;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
-import xyz.dashnetwork.freecam.entity.FreecamEntity;
+import xyz.dashnetwork.freecam.entity.CameraEntity;
 
 public class FreecamMod implements ClientModInitializer {
 
@@ -22,14 +21,14 @@ public class FreecamMod implements ClientModInitializer {
 
     private final Logger logger = LogManager.getLogger("Freecam");
     private KeyBinding freecamBinding;
-    private FreecamEntity freecamEntity;
+    private CameraEntity cameraEntity;
     private boolean freecam;
 
     public FreecamMod() { instance = this; }
 
     public boolean isEnabled() { return freecam; }
 
-    public FreecamEntity getEntity() { return freecamEntity; }
+    public CameraEntity getEntity() { return cameraEntity; }
 
     @Override
     public void initClient() {
@@ -54,18 +53,20 @@ public class FreecamMod implements ClientModInitializer {
         Minecraft minecraft = Minecraft.getInstance();
         LocalClientPlayerEntity player = minecraft.player;
 
-        freecamEntity = new FreecamEntity(minecraft);
-        freecamEntity.spawn();
-        freecamEntity.setPositionAndAngles(player.x, player.y, player.z, player.yaw, player.pitch);
-        freecamEntity.inventory.items = player.inventory.items;
-        freecamEntity.input = new KeyboardInput(minecraft.options);
+        cameraEntity = new CameraEntity(minecraft);
+        cameraEntity.spawn();
+        cameraEntity.setGameMode(WorldSettings.GameMode.SPECTATOR);
+        cameraEntity.setPositionAndAngles(player.x, player.y, player.z, player.yaw, player.pitch);
+        cameraEntity.inventory.items = player.inventory.items;
+        cameraEntity.input = player.input;
+
         player.input = new Input();
-        freecamEntity.setGameMode(WorldSettings.GameMode.SPECTATOR);
-        minecraft.setCamera(freecamEntity);
-        minecraft.options.perspective = 0;
         player.setJumping(false);
         player.forwardSpeed = 0;
         player.sidewaysSpeed = 0;
+
+        minecraft.setCamera(cameraEntity);
+        minecraft.options.perspective = 0;
 
         minecraft.gui.setOverlayMessage("Freecam enabled", false);
         logger.info("Freecam enabled");
@@ -76,14 +77,14 @@ public class FreecamMod implements ClientModInitializer {
         Minecraft minecraft = Minecraft.getInstance();
         LocalClientPlayerEntity player = minecraft.player;
 
-        freecamEntity.despawn();
+        cameraEntity.despawn();
 
-        player.input = freecamEntity.input;
+        player.input = cameraEntity.input;
         minecraft.setCamera(player);
         minecraft.worldRenderer.reload();
         minecraft.getEntityRenderDispatcher().camera = player;
 
-        freecamEntity = null;
+        cameraEntity = null;
 
         minecraft.gui.setOverlayMessage("Freecam disabled", false);
         logger.info("Freecam disabled");
