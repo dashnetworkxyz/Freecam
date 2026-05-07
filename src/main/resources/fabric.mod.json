@@ -9,6 +9,7 @@
     "sources": "https://github.com/dashnetworkxyz/Freecam"
   },
   "license": "GPL-3.0",
+  "icon": "assets/freecam/icon.png",
   "environment": "client",
   "entrypoints": {
     "client-init": [
